@@ -1,88 +1,172 @@
+```html
 <!DOCTYPE html>
 <html>
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>犬のうんちく</title>
+<title>今日の猫うんちく</title>
 
 <style>
 
 body{
+margin:0;
+padding:20px;
 font-family:sans-serif;
+background:#f2f2f2;
 text-align:center;
-margin:20px;
-background:#f9f9f9;
+}
+
+.card{
+max-width:850px;
+margin:auto;
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,0.15);
 }
 
 h1{
-font-size:34px;
+font-size:42px;
+margin-bottom:10px;
+}
+
+img{
+width:100%;
+max-width:500px;
+border-radius:20px;
+margin-top:15px;
 }
 
 .title{
 font-size:36px;
 font-weight:bold;
-margin-top:25px;
+margin-top:20px;
 }
 
 .text{
-max-width:800px;
-margin:auto;
 font-size:26px;
 line-height:1.8;
 margin-top:20px;
 }
 
 button{
-font-size:28px;
-padding:20px 30px;
-margin-top:40px;
-border-radius:10px;
+font-size:26px;
+padding:18px 30px;
+margin-top:25px;
 border:none;
-background:#4CAF50;
+border-radius:15px;
+background:#ff9800;
 color:white;
+cursor:pointer;
 }
 
-button:active{
-background:#388E3C;
+button:hover{
+opacity:0.9;
+}
+
+.audioBtn{
+background:#03A9F4;
+margin-left:10px;
+}
+
+.loading{
+font-size:28px;
+margin-top:40px;
 }
 
 </style>
-
 </head>
 
 <body>
 
-<h1>🐶 犬のうんちく</h1>
+<div class="card">
+
+<h1>🐱 今日の猫うんちく</h1>
+
+<div id="loading" class="loading">
+読み込み中...
+</div>
+
+<img id="catImage" src="">
 
 <div class="title" id="title"></div>
+
 <div class="text" id="text"></div>
 
-<button onclick="loadTrivia()">別のうんちく</button>
+<button onclick="loadTrivia()">
+別のうんちく
+</button>
+
+<button class="audioBtn" onclick="playMeow()">
+🔊 ニャー
+</button>
+
+<audio id="meowAudio">
+<source src="https://www.soundjay.com/cat/cat-meow-2.mp3" type="audio/mpeg">
+</audio>
+
+</div>
 
 <script>
 
+const csvUrl =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vSHhRfRbwkndjpL4OKibjXyWf1wa5wDnv8_iDlY8zC5l3S6rBwdc_sWB3mHh7OOkvU3U7G1mv7TqM_a/pub?gid=0&single=true&output=csv";
+
+const catImages = [
+
+"https://cataas.com/cat?1",
+"https://cataas.com/cat?2",
+"https://cataas.com/cat?3",
+"https://cataas.com/cat?4",
+"https://cataas.com/cat?5"
+
+];
+
 async function loadTrivia(){
 
-let res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQlZqF7nIBIcNiALO9tGg1cBL6eckZSZoyeiuM3RuQ4TWq5CDm5EdY9LbLgYJNBdK8GEVToMUS-rUFl/pub?gid=586931856&single=true&output=csv");
+document.getElementById("loading").style.display="block";
 
-let text = await res.text();
+let res = await fetch(csvUrl);
 
-let rows = text.split("\n").slice(1);
+let csv = await res.text();
 
-let data = rows.map(r=>{
-let c = r.split(",");
+let rows = csv.trim().split("\n").slice(1);
+
+let data = rows.map(row => {
+
+let cols = row.split(",");
+
 return {
-title:c[0],
-text:c[1]
+
+title: cols[0],
+
+text: cols.slice(1).join(",")
+
 };
+
 });
 
-let r = Math.floor(Math.random()*data.length);
+let random = Math.floor(Math.random()*data.length);
 
-document.getElementById("title").innerText = data[r].title;
-document.getElementById("text").innerText = data[r].text;
+document.getElementById("title").innerText =
+data[random].title;
+
+document.getElementById("text").innerText =
+data[random].text;
+
+let imgRandom =
+Math.floor(Math.random()*catImages.length);
+
+document.getElementById("catImage").src =
+catImages[imgRandom];
+
+document.getElementById("loading").style.display="none";
+
+}
+
+function playMeow(){
+
+document.getElementById("meowAudio").play();
 
 }
 
@@ -92,3 +176,4 @@ loadTrivia();
 
 </body>
 </html>
+```

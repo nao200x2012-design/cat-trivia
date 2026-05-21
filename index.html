@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>犬のうんちく</title>
+
+<style>
+
+body{
+font-family:sans-serif;
+text-align:center;
+margin:20px;
+background:#f9f9f9;
+}
+
+h1{
+font-size:34px;
+}
+
+.title{
+font-size:36px;
+font-weight:bold;
+margin-top:25px;
+}
+
+.text{
+max-width:800px;
+margin:auto;
+font-size:26px;
+line-height:1.8;
+margin-top:20px;
+}
+
+button{
+font-size:28px;
+padding:20px 30px;
+margin-top:40px;
+border-radius:10px;
+border:none;
+background:#4CAF50;
+color:white;
+}
+
+button:active{
+background:#388E3C;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>🐶 犬のうんちく</h1>
+
+<div class="title" id="title"></div>
+<div class="text" id="text"></div>
+
+<button onclick="loadTrivia()">別のうんちく</button>
+
+<script>
+
+async function loadTrivia(){
+
+let res = await fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vQlZqF7nIBIcNiALO9tGg1cBL6eckZSZoyeiuM3RuQ4TWq5CDm5EdY9LbLgYJNBdK8GEVToMUS-rUFl/pub?gid=586931856&single=true&output=csv");
+
+let text = await res.text();
+
+let rows = text.split("\n").slice(1);
+
+let data = rows.map(r=>{
+let c = r.split(",");
+return {
+title:c[0],
+text:c[1]
+};
+});
+
+let r = Math.floor(Math.random()*data.length);
+
+document.getElementById("title").innerText = data[r].title;
+document.getElementById("text").innerText = data[r].text;
+
+}
+
+loadTrivia();
+
+</script>
+
+</body>
+</html>

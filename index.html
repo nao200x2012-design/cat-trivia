@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>今日の猫うんちく</title>
+<title>猫のうんちく</title>
 
 <style>
 body{
@@ -30,6 +30,8 @@ font-size:42px;
 img{
 width:100%;
 max-width:500px;
+aspect-ratio:1/1;
+object-fit:cover;
 border-radius:20px;
 margin-top:15px;
 }
@@ -54,6 +56,7 @@ border:none;
 border-radius:15px;
 background:#ff9800;
 color:white;
+cursor:pointer;
 }
 
 .audioBtn{
@@ -72,20 +75,32 @@ margin-top:40px;
 
 <div class="card">
 
-<h1>🐱 今日の猫うんちく</h1>
+<h1>🐱 猫のうんちく</h1>
 
-<div id="loading" class="loading">読み込み中...</div>
+<div id="loading" class="loading">
+読み込み中...
+</div>
 
 <img id="catImage" src="">
 
 <div class="title" id="title"></div>
+
 <div class="text" id="text"></div>
 
-<button onclick="loadTrivia()">別のうんちく</button>
-<button class="audioBtn" onclick="playMeow()">🔊 ニャー</button>
+<button onclick="loadTrivia()">
+別のうんちく
+</button>
+
+<button class="audioBtn" onclick="playMeow()">
+🔊 ニャー
+</button>
 
 <audio id="meowAudio" preload="auto">
 <source src="https://assets.mixkit.co/active_storage/sfx/93/93-preview.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="bgm" loop preload="auto">
+<source src="bgm.mp3" type="audio/mpeg">
 </audio>
 
 </div>
@@ -121,11 +136,17 @@ text: cols.slice(1).join(",")
 
 let random = Math.floor(Math.random()*data.length);
 
-document.getElementById("title").innerText = data[random].title;
-document.getElementById("text").innerText = data[random].text;
+document.getElementById("title").innerText =
+data[random].title;
 
-let imgRandom = Math.floor(Math.random()*catImages.length);
-document.getElementById("catImage").src = catImages[imgRandom];
+document.getElementById("text").innerText =
+data[random].text;
+
+let imgRandom =
+Math.floor(Math.random()*catImages.length);
+
+document.getElementById("catImage").src =
+catImages[imgRandom];
 
 document.getElementById("loading").style.display="none";
 
@@ -133,12 +154,14 @@ document.getElementById("loading").style.display="none";
 
 function playMeow(){
 
-let audio = document.getElementById("meowAudio");
-audio.currentTime = 0;
+let meow = document.getElementById("meowAudio");
+let bgm = document.getElementById("bgm");
 
-audio.play().catch(function(error){
-alert("音が鳴らない場合は、スマホの消音モードや音量を確認してください。");
-});
+meow.currentTime = 0;
+meow.play();
+
+bgm.volume = 0.3;
+bgm.play();
 
 }
 
